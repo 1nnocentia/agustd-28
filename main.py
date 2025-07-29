@@ -57,6 +57,7 @@ class SimpleLyricPopup:
         )
         self.label.pack(expand=True)
 
+
     def on_close(self):
         self.running = False
         pygame.mixer.music.stop()
@@ -83,6 +84,7 @@ class SimpleLyricPopup:
         pygame.mixer.music.play()
 
         threading.Thread(target=self.update_lyrics, daemon=True).start()
+        self.check_music_and_close()
         self.root.mainloop()
 
     def update_lyrics(self):
@@ -98,6 +100,13 @@ class SimpleLyricPopup:
                 # time.sleep(delay)
             self.fade_in_text(self.english_lines[i])
             # self.label.config(text=self.english_lines[i])
+
+    def check_music_and_close(self):
+        if not pygame.mixer.music.get_busy():
+            print("Music finished. Closing popup.")
+            self.root.destroy()
+        else:
+            self.root.after(500, self.check_music_and_close)
 
 # === ENGLISH LYRICS ===
 english_lyrics = [
