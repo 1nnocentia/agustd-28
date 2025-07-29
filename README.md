@@ -4,10 +4,6 @@ This is a simple Python application that displays synchronized English-translate
 
 ---
 
-![Visitor Count](https://hits.dwyl.com/1nnocentia/agustd-28.svg)
-
----
-
 ## ✨ Features
 
 - 🎧 Plays MP3 audio of Agust D's "28"
