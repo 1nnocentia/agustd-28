@@ -4,6 +4,10 @@ This is a simple Python application that displays synchronized English-translate
 
 ---
 
+![Visitors](https://visitor-badge.glitch.me/badge?page_id=1mnocentia.agustd-28)
+
+---
+
 ## ✨ Features
 
 - 🎧 Plays MP3 audio of Agust D's "28"
