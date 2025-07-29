@@ -30,8 +30,10 @@ class SimpleLyricPopup:
         self.lyrics = load_lrc(lrc_file)
         self.english_lines = english_lines
         self.index = 0
+        self.running = True
 
         self.root = tk.Tk()
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         self.root.title("Agust D - 28")
         self.root.geometry("800x600")
         self.root.resizable(False, False)
@@ -55,16 +57,21 @@ class SimpleLyricPopup:
         )
         self.label.pack(expand=True)
 
+    def on_close(self):
+        self.running = False
+        pygame.mixer.music.stop()
+        self.root.destroy()
+
     def fade_in_text(self, text):
         self.label.config(text=text)
-        for i in range(0, 21):
+        for i in range(0, 10):
             color = f'#{i*12:02x}{i*12:02x}{i*12:02x}'
             self.label.config(fg=color)
             self.root.update()
             time.sleep(0.03)
 
     def fade_out_text(self):
-        for i in reversed(range(0, 21)):  # 20 to 0
+        for i in reversed(range(0, 10)):
             color = f'#{i*12:02x}{i*12:02x}{i*12:02x}'
             self.label.config(fg=color)
             self.root.update()
@@ -75,12 +82,14 @@ class SimpleLyricPopup:
         pygame.mixer.music.load(self.audio_file)
         pygame.mixer.music.play()
 
-        threading.Thread(target=self.update_lyrics).start()
+        threading.Thread(target=self.update_lyrics, daemon=True).start()
         self.root.mainloop()
 
     def update_lyrics(self):
         start_time = time.time()
         for i, (ts, _) in enumerate(self.lyrics):
+            if not self.running:
+                break
             delay = ts - (time.time() - start_time)
             if delay > 0:
                 time.sleep(delay)
