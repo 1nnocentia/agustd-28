@@ -55,30 +55,20 @@ class SimpleLyricPopup:
         )
         self.label.pack(expand=True)
 
-        def fade_in_text(self, text):
-            self.label.config(text=text)
-            for i in range(0, 21):
-                color = f'#{i*12:02x}{i*12:02x}{i*12:02x}'
-                self.label.config(fg=color)
-                self.root.update()
-                time.sleep(0.03)
+    def fade_in_text(self, text):
+        self.label.config(text=text)
+        for i in range(0, 21):
+            color = f'#{i*12:02x}{i*12:02x}{i*12:02x}'
+            self.label.config(fg=color)
+            self.root.update()
+            time.sleep(0.03)
 
-        def fade_out_text(self):
-            for i in reversed(range(0, 21)):  # 20 to 0
-                color = f'#{i*12:02x}{i*12:02x}{i*12:02x}'
-                self.label.config(fg=color)
-                self.root.update()
-                time.sleep(0.03)
-
-    def start(self):
-        pygame.mixer.init()
-        pygame.mixer.music.load(self.audio_file)
-        pygame.mixer.music.play()
-
-        threading.Thread(target=self.update_lyrics).start()
-        self.root.mainloop()
-        self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
-        self.label.pack(expand=True)
+    def fade_out_text(self):
+        for i in reversed(range(0, 21)):  # 20 to 0
+            color = f'#{i*12:02x}{i*12:02x}{i*12:02x}'
+            self.label.config(fg=color)
+            self.root.update()
+            time.sleep(0.03)
 
     def start(self):
         pygame.mixer.init()
@@ -92,6 +82,8 @@ class SimpleLyricPopup:
         start_time = time.time()
         for i, (ts, _) in enumerate(self.lyrics):
             delay = ts - (time.time() - start_time)
+            if delay > 0:
+                time.sleep(delay)
             if i > 0:
                 self.fade_out_text()
                 # time.sleep(delay)
